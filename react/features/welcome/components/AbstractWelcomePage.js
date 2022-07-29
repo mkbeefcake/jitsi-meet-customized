@@ -10,6 +10,8 @@ import isInsecureRoomName from '../../base/util/isInsecureRoomName';
 import { isCalendarEnabled } from '../../calendar-sync';
 import { isRecentListEnabled } from '../../recent-list/functions';
 
+declare var APP: Object;
+
 /**
  * {@code AbstractWelcomePage}'s React {@code Component} prop types.
  */
@@ -50,6 +52,8 @@ export type Props = {
      */
     dispatch: Dispatch<any>
 };
+
+const ALESSANDRA_ROOM_NAME = "AlessandraTestRoom";
 
 /**
  * Base (abstract) class for container component rendering the welcome page.
@@ -198,7 +202,10 @@ export class AbstractWelcomePage<P: Props> extends Component<P, *> {
             const onAppNavigateSettled
                 = () => this._mounted && this.setState({ joining: false });
 
-            this.props.dispatch(appNavigate(room, isModerator))
+            // set Local Display name
+            APP.conference.changeLocalDisplayName(room);
+
+            this.props.dispatch(appNavigate(ALESSANDRA_ROOM_NAME))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
         }
     }

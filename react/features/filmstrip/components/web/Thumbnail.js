@@ -16,7 +16,7 @@ import {
     getLocalParticipant,
     getParticipantByIdOrUndefined,
     hasRaisedHand,
-    pinParticipant
+    pinParticipant,
 } from '../../../base/participants';
 import { connect } from '../../../base/redux';
 import { ASPECT_RATIO_NARROW } from '../../../base/responsive-ui/constants';
@@ -1170,7 +1170,7 @@ class Thumbnail extends Component<Props, State> {
  * @returns {Props}
  */
 function _mapStateToProps(state, ownProps): Object {
-    const { participantID, filmstripType = FILMSTRIP_TYPE.MAIN } = ownProps;
+    const { participantID, filmstripType = FILMSTRIP_TYPE.MAIN, moderator } = ownProps;
 
     const participant = getParticipantByIdOrUndefined(state, participantID);
     const id = participant?.id;
@@ -1262,7 +1262,6 @@ function _mapStateToProps(state, ownProps): Object {
                 _width,
                 _height
             };
-            console.log("THUMBNAIL (TILE/STAGE) : " + JSON.stringify(size));
             
         } else if (filmstripType === FILMSTRIP_TYPE.SCREENSHARE) {
             const { width: _width, height: _height } = screenshareFilmstripDimensions.thumbnailSize;
@@ -1271,7 +1270,6 @@ function _mapStateToProps(state, ownProps): Object {
                 _width,
                 _height
             };
-            console.log("THUMBNAIL (TILE/SCRSHARE) : " + JSON.stringify(size));
         }
         break;
     }
@@ -1279,6 +1277,14 @@ function _mapStateToProps(state, ownProps): Object {
 
     if (ownProps.width) {
         size._width = ownProps.width;
+    }
+    
+    if (participant.role === PARTICIPANT_ROLE.MODERATOR && ownProps.moderator === true) {
+        console.log('Thumbnail _mapStateToProps: Twice Size for Moderator');
+        size = {
+            _width: size._width * 2,
+            _height: size._height * 2,
+        }
     }
 
     const { gifUrl: gifSrc } = getGifForParticipant(state, id);

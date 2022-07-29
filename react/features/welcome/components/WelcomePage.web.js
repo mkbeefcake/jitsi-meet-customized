@@ -185,9 +185,9 @@ class WelcomePage extends AbstractWelcomePage {
             <div
                 className = { `welcome ${contentClassName} ${footerClassName}` }
                 id = 'welcome_page'>
-                <div className = 'welcome-watermark'>
+                {/* <div className = 'welcome-watermark'>
                     <Watermarks defaultJitsiLogoURL = { DEFAULT_WELCOME_PAGE_LOGO_URL } />
-                </div>
+                </div> */}
 
                 <div className = 'header'>
                     <div className = 'welcome-page-settings'>
@@ -203,12 +203,12 @@ class WelcomePage extends AbstractWelcomePage {
                     </div>
                     <div className = 'header-image' />
                     <div className = 'header-container'>
-                        <h1 className = 'header-text-title'>
+                        {/* <h1 className = 'header-text-title'>
                             { t('welcomepage.headerTitle') }
-                        </h1>
-                        <span className = 'header-text-subtitle'>
+                        </h1> */}
+                        {/* <span className = 'header-text-subtitle'>
                             { t('welcomepage.headerSubtitle')}
-                        </span>
+                        </span> */}
                         <div id = 'enter_room'>
                             <div className = 'enter-room-input-container'>
                                 <form onSubmit = { this._onFormSubmit }>
@@ -262,20 +262,20 @@ class WelcomePage extends AbstractWelcomePage {
                         <div className = 'welcome-tabs welcome-card welcome-card--blue'>
                             { this._renderTabs() }
                         </div>
-                        { showAdditionalCard
+                        {/* { showAdditionalCard
                             ? <div
                                 className = 'welcome-card welcome-card--dark'
                                 ref = { this._setAdditionalCardRef } />
-                            : null }
+                            : null } */}
                     </div>
 
-                    { showAdditionalContent
+                    {/* { showAdditionalContent
                         ? <div
                             className = 'welcome-page-content'
                             ref = { this._setAdditionalContentRef } />
-                        : null }
+                        : null } */}
                 </div>
-                { DISPLAY_WELCOME_FOOTER && this._renderFooter()}
+                {/* { DISPLAY_WELCOME_FOOTER && this._renderFooter()} */}
             </div>
 
         );

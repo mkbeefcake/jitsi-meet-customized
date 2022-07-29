@@ -301,7 +301,11 @@ export function calculateResponsiveTileViewDimensions({
     desiredNumberOfVisibleTiles = TILE_VIEW_DEFAULT_NUMBER_OF_VISIBLE_TILES,
     minTileHeight
 }) {
-    numberOfParticipants = numberOfParticipants + 3;
+    console.log(`calculateResponsiveTileViewDimensions : ${numberOfParticipants}`);
+    if (numberOfParticipants === undefined)
+        numberOfParticipants = 0;
+        
+    numberOfParticipants = numberOfParticipants + 4;
 
     let height, width;
     let columns, rows;

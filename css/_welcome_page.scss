@@ -5,7 +5,8 @@ body.welcome-page {
 
 .welcome {
     background-image: $welcomePageBackground;
-    background-color: #fff;
+    // background-color: #fff;
+    background-color: #131519;
     display: flex;
     flex-direction: column;
     font-family: $welcomePageFontFamily;
@@ -14,10 +15,10 @@ body.welcome-page {
     position: relative;
 
     .header {
-        background-image: $welcomePageHeaderBackground;
-        background-position: $welcomePageHeaderBackgroundPosition;
-        background-repeat: $welcomePageHeaderBackgroundRepeat;
-        background-size: $welcomePageHeaderBackgroundSize;
+        // background-image: $welcomePageHeaderBackground;
+        // background-position: $welcomePageHeaderBackgroundPosition;
+        // background-repeat: $welcomePageHeaderBackgroundRepeat;
+        // background-size: $welcomePageHeaderBackgroundSize;
         padding-bottom: $welcomePageHeaderPaddingBottom;
         background-color: #131519;
         height: 500px;

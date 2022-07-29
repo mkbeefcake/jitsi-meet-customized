@@ -7,8 +7,12 @@ import React, { PureComponent } from 'react';
 import { FixedSizeList, FixedSizeGrid } from 'react-window';
 import type { Dispatch } from 'redux';
 
-import RGL, { WidthProvider } from "react-grid-layout";
-const ReactGridLayout = WidthProvider(RGL);
+// import RGL, {Responsive, WidthProvider } from "react-grid-layout";
+// const ReactGridLayout = WidthProvider(Responsive);
+
+import GridLayout from "react-grid-layout";
+import { getLocalParticipant } from '../../../base/participants';
+import { getParticipantByIdOrUndefined, PARTICIPANT_ROLE } from '../../../base/participants';
 
 import {
     createShortcutEvent,
@@ -297,6 +301,8 @@ class Filmstrip extends PureComponent <Props, State> {
         this._onDragHandleMouseDown = this._onDragHandleMouseDown.bind(this);
         this._onDragMouseUp = this._onDragMouseUp.bind(this);
         this._onFilmstripResize = this._onFilmstripResize.bind(this);
+        this._generateLayout = this._generateLayout.bind(this);
+        this._generateThumbDOM = this._generateThumbDOM.bind(this);
 
         this._throttledResize = _.throttle(
             this._onFilmstripResize,
@@ -678,6 +684,85 @@ class Filmstrip extends PureComponent <Props, State> {
         dispatch(setVisibleRemoteParticipants(startIndex, stopIndex));
     }
 
+    _generateLayout: () => void;
+
+    _generateLayout() {
+
+        const { 
+            _rows,
+            _columns,
+            _remoteParticipantDetails,
+            _localId
+        } = this.props;
+
+        return _.map(_remoteParticipantDetails, function(participant, i) {
+            const _participantID = participant.id;
+            
+            if (participant.role === PARTICIPANT_ROLE.MODERATOR) {
+                console.log(`_generateLayout: Moderator ${_participantID}`);
+                return {
+                    x: 0, y: 0, w: 2, h: 2, i: `remote_${_participantID}`
+                };
+            }
+
+            console.log(`_generateLayout: Normal ${_participantID}`);
+            return {
+                i: `remote_${_participantID}`,
+                x: (i+2) % _columns, 
+                y: (i+2) / _columns,
+                w: 1,
+                h: 1
+            };
+        });
+
+    }
+
+    _generateThumbDOM: () => void;
+
+    _generateThumbDOM() {
+        const { 
+            _disableSelfView,
+            _filmstripType = FILMSTRIP_TYPE.MAIN,
+            _isLocalScreenShare = false,
+            _horizontalOffset = 0,
+            _thumbnailWidth,
+            _remoteParticipantDetails,
+            style
+        } = this.props;
+
+        return _remoteParticipantDetails.map(function(participant) {
+            const participantID = participant.id;
+            
+            if (participant.role === PARTICIPANT_ROLE.MODERATOR) {
+                return (
+                    <div key={ `remote_${participantID}` }>
+                        <Thumbnail
+                            filmstripType = { _filmstripType }
+                            horizontalOffset = { _horizontalOffset }
+                            key = { `remote_${participantID}` }
+                            participantID = { participantID }
+                            moderator = { true }
+                            style = { style }
+                            width = { _thumbnailWidth} />
+                    </div>
+                );
+            }
+
+            return (
+                <div key={ `remote_${participantID}` }>
+                    <Thumbnail
+                        filmstripType = { _filmstripType }
+                        horizontalOffset = { _horizontalOffset }
+                        key = { `remote_${participantID}` }
+                        participantID = { participantID }
+                        style = { style }
+                        width = { _thumbnailWidth } />
+                </div>
+            );
+    
+        });
+    }
+
     /**
      * Renders the thumbnails for remote participants.
      *
@@ -732,20 +817,23 @@ class Filmstrip extends PureComponent <Props, State> {
             //         }
             //     </FixedSizeGrid>
             // );
-            const layout = [
-                { i: "a", x: 0, y: 0, w: 2, h: 2},
-                { i: "b", x: 2, y: 0, w: 1, h: 1}
-            ];
+            // const layout = [
+            //     { i: "a", x: 0, y: 0, w: 2, h: 2},
+            //     { i: "b", x: 2, y: 0, w: 1, h: 1}
+            // ];
             return (
-                <ReactGridLayout
-                    className = 'layout'
-                    layout = { layout }
+                <GridLayout 
+                    layout = { this._generateLayout() }
                     cols = { _columns }
-                    rowHeight = {_thumbnailHeight + TILE_VERTICAL_MARGIN}
+                    width = { _filmstripWidth }
+                    height = { _filmstripHeight }
+                    rowHeight = { _thumbnailHeight + TILE_VERTICAL_MARGIN }
+                    compactType='horizontal'
                     >
-                    <div key="a">AA</div>
-                    <div key="b">BB</div>
-                </ReactGridLayout>
+                    {/* <div key="a">AA</div>
+                    <div key="b">BB</div> */}
+                    { this._generateThumbDOM() }
+                </GridLayout>
             );
         }
 
@@ -928,6 +1016,7 @@ function _mapStateToProps(state, ownProps) {
     const { isOpen: shiftRight } = state['features/chat'];
     const disableSelfView = shouldHideSelfView(state);
     const { clientWidth, clientHeight } = state['features/base/responsive-ui'];
+    const localId = getLocalParticipant(state).id;
 
     const collapseTileView = reduceHeight
         && isMobileBrowser()
@@ -949,6 +1038,10 @@ function _mapStateToProps(state, ownProps) {
     const _currentLayout = getCurrentLayout(state);
     const _isVerticalFilmstrip = _currentLayout === LAYOUTS.VERTICAL_FILMSTRIP_VIEW
         || (filmstripType === FILMSTRIP_TYPE.MAIN && _currentLayout === LAYOUTS.STAGE_FILMSTRIP_VIEW);
+    
+    const remoteParticipantDetails = _.map([localId, ..._remoteParticipants], function(participant, i) {
+        return getParticipantByIdOrUndefined(state, participant);
+    });
 
     return {
         _className: className,
@@ -971,7 +1064,9 @@ function _mapStateToProps(state, ownProps) {
         _topPanelVisible,
         _verticalFilmstripWidth: verticalFilmstripWidth.current,
         _verticalViewMaxWidth: getVerticalViewMaxWidth(state),
-        _videosClassName: videosClassName
+        _videosClassName: videosClassName,
+        _localId: localId,
+        _remoteParticipantDetails: remoteParticipantDetails,
     };
 }
 

@@ -51,8 +51,7 @@ export * from './actions.any';
  * scheme, or a mere room name.
  * @returns {Function}
  */
-export function appNavigate(uri: ?string, isModerator: ?boolean) {
-    console.log('appNavigate : uri=' + uri + ' isModerator=' + isModerator);
+export function appNavigate(uri: ?string) {
     
     return async (dispatch: Dispatch<any>, getState: Function) => {
         let location = parseURIString(uri);

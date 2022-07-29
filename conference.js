@@ -3162,6 +3162,8 @@ export default {
      * @param nickname {string} the new display name
      */
     changeLocalDisplayName(nickname = '') {
+        console.log(`Conference.changeLocalDisplayName () : nickname = ${nickname}`);
+
         const formattedNickname = getNormalizedDisplayName(nickname);
 
         APP.store.dispatch(updateSettings({
