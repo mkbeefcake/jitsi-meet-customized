@@ -304,8 +304,8 @@ export function calculateResponsiveTileViewDimensions({
     console.log(`calculateResponsiveTileViewDimensions : ${numberOfParticipants}`);
     if (numberOfParticipants === undefined)
         numberOfParticipants = 0;
-        
-    numberOfParticipants = numberOfParticipants + 4;
+
+    numberOfParticipants = numberOfParticipants + 3;
 
     let height, width;
     let columns, rows;

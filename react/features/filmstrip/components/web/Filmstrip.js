@@ -695,24 +695,36 @@ class Filmstrip extends PureComponent <Props, State> {
             _localId
         } = this.props;
 
+        const MODERATOR_WIDTH_RATE = 2;
+        const MODERATOR_HEIGHT_RATE = 2;
+
+        let bypassModerator = false;
         return _.map(_remoteParticipantDetails, function(participant, i) {
             const _participantID = participant.id;
             
             if (participant.role === PARTICIPANT_ROLE.MODERATOR) {
-                console.log(`_generateLayout: Moderator ${_participantID}`);
+                console.log(`_generateLayout(): Moderator ${_participantID} [0, 0, ${i}]`);
+                bypassModerator = true;
                 return {
-                    x: 0, y: 0, w: 2, h: 2, i: `remote_${_participantID}`
+                    x: 0, y: 0, w: MODERATOR_WIDTH_RATE, h: MODERATOR_HEIGHT_RATE, i: `remote_${_participantID}`
                 };
             }
 
-            console.log(`_generateLayout: Normal ${_participantID}`);
+            let index = bypassModerator == false ? (i + MODERATOR_WIDTH_RATE) : (i + 1);
+            while ( ((index / _columns) < MODERATOR_HEIGHT_RATE) 
+                && (index % _columns < MODERATOR_WIDTH_RATE)) {
+                index ++;
+            }
+
+            console.log(`_generateLayout(): NormlUser ${_participantID}, [${index % _columns}, ${Math.floor(index / _columns)}, ${i}]`);
             return {
                 i: `remote_${_participantID}`,
-                x: (i+2) % _columns, 
-                y: (i+2) / _columns,
+                x: index % _columns, 
+                y: Math.floor(index / _columns),
                 w: 1,
                 h: 1
             };
+
         });
 
     }

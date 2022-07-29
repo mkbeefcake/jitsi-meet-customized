@@ -15,7 +15,7 @@ declare var interfaceConfig: Object;
  * @private
  */
 const _RIGHT_WATERMARK_STYLE = {
-    backgroundImage: 'url(images/rightwatermark.png)'
+    // backgroundImage: 'url(images/rightwatermark.png)'
 };
 
 /**
@@ -165,7 +165,7 @@ class Watermarks extends Component<Props, State> {
 
         if (_showJitsiWatermark) {
             const style = {
-                backgroundImage: `url(${_logoUrl})`,
+                // backgroundImage: `url(${_logoUrl})`,
                 maxWidth: 140,
                 maxHeight: 70,
                 position: _logoLink ? 'static' : 'absolute'

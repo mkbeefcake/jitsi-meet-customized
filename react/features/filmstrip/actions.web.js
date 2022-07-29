@@ -80,7 +80,7 @@ export function setTileViewDimensions() {
         const { numberOfVisibleTiles = TILE_VIEW_DEFAULT_NUMBER_OF_VISIBLE_TILES } = tileView;
         const numberOfParticipants = getNumberOfPartipantsForTileView(state);
         const maxColumns = getMaxColumnCount(state);
-        const numberOfRemoteParticipants = getRemoteParticipantCount(state);
+        // const numberOfRemoteParticipants = getRemoteParticipantCount(state);
 
         console.log('setTileViewDimensions : ' + JSON.stringify({clientWidth,
             clientHeight,
@@ -101,7 +101,7 @@ export function setTileViewDimensions() {
                 clientHeight,
                 disableTileEnlargement,
                 maxColumns,
-                numberOfRemoteParticipants, /*numberOfParticipants,*/
+                numberOfParticipants,
                 desiredNumberOfVisibleTiles: numberOfVisibleTiles
             });
 

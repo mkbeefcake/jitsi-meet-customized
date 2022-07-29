@@ -1280,7 +1280,6 @@ function _mapStateToProps(state, ownProps): Object {
     }
     
     if (participant.role === PARTICIPANT_ROLE.MODERATOR && ownProps.moderator === true) {
-        console.log('Thumbnail _mapStateToProps: Twice Size for Moderator');
         size = {
             _width: size._width * 2,
             _height: size._height * 2,
