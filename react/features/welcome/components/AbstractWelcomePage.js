@@ -202,7 +202,7 @@ export class AbstractWelcomePage<P: Props> extends Component<P, *> {
             const onAppNavigateSettled
                 = () => this._mounted && this.setState({ joining: false });
 
-            // set Local Display name
+            // set Local Display name (treated room as username)
             APP.conference.changeLocalDisplayName(room);
 
             this.props.dispatch(appNavigate(ALESSANDRA_ROOM_NAME))

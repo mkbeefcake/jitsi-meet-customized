@@ -213,6 +213,7 @@ function getConfig(options = {}) {
                 })
         ].filter(Boolean),
         resolve: {
+
             alias: {
                 'focus-visible': 'focus-visible/dist/focus-visible.min.js'
             },
@@ -236,7 +237,8 @@ function getConfig(options = {}) {
                 crypto: false,
                 fs: false,
                 path: false,
-                process: false
+                process: false,
+                url: false
             }
         }
     };

@@ -161,6 +161,7 @@ import { createRnnoiseProcessor } from './react/features/stream-effects/rnnoise'
 import { endpointMessageReceived } from './react/features/subtitles';
 import { muteLocal } from './react/features/video-menu/actions.any';
 import UIEvents from './service/UI/UIEvents';
+// import MqttClient from './mqtt-client';
 
 const logger = Logger.getLogger(__filename);
 
@@ -743,7 +744,9 @@ export default {
         con.addEventListener(JitsiConnectionEvents.CONNECTION_FAILED, _connectionFailedHandler);
         APP.connection = connection = con;
 
+        console.log(`startConference() is called`);
         this._createRoom(tracks);
+        //MqttClient.connectToPublisher('Hello', undefined);
 
         // if user didn't give access to mic or camera or doesn't have
         // them at all, we mark corresponding toolbar buttons as muted,
@@ -1428,6 +1431,7 @@ export default {
     },
 
     _createRoom(localTracks) {
+        console.log(`conference._createRoom() is called`);
         room = connection.initJitsiConference(APP.conference.roomName, this._getConferenceOptions());
 
         // Filter out the tracks that are muted (except on Safari).
@@ -1435,6 +1439,9 @@ export default {
 
         this._setLocalAudioVideoStreams(tracks);
         this._room = room; // FIXME do not use this
+
+        const role = room.getRole();
+        console.log(`conference._createRoom() : Role = ${role}`);
 
         APP.store.dispatch(_conferenceWillJoin(room));
 

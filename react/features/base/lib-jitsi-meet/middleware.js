@@ -43,6 +43,7 @@ MiddlewareRegistry.register(store => next => action => {
         break;
 
     case SET_CONFIG:
+        console.log(`lib-jitsi-meet middleware: SET_CONFIG is called`);
         return _setConfig(store, next, action);
     }
 

@@ -507,6 +507,7 @@ export function conferenceWillLeave(conference: Object) {
  */
 export function createConference(overrideRoom?: string) {
     return (dispatch: Function, getState: Function) => {
+
         const state = getState();
         const { connection, locationURL } = state['features/base/connection'];
 
@@ -533,6 +534,7 @@ export function createConference(overrideRoom?: string) {
             _room.domain = tmp.domain;
         }
 
+        console.log(`createConference() is called : ${room}`);
         const conference = connection.initJitsiConference(_room, getConferenceOptions(state));
 
         connection[JITSI_CONNECTION_CONFERENCE_KEY] = conference;

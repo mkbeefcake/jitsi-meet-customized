@@ -455,6 +455,8 @@ export function sendLocalParticipant(
         name
     } = getLocalParticipant(stateful);
 
+    console.log(`sendLocalParticipant() : ${name}, ${email}`);
+
     avatarURL && conference.sendCommand(AVATAR_URL_COMMAND, {
         value: avatarURL
     });
