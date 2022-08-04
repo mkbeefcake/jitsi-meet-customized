@@ -197,6 +197,9 @@ function getConfig(options = {}) {
         optimization: {
             concatenateModules: minimize,
             minimize
+            //splitChunks: {
+            //    chunks: 'all',
+            //}
         },
         output: {
             filename: `[name]${minimize ? '.min' : ''}.js`,
@@ -234,11 +237,13 @@ function getConfig(options = {}) {
             ],
             fallback: {
                 // Provide some empty Node modules (required by AtlasKit, olm).
+                path: require.resolve('path-browserify'),
+                url: require.resolve('url'),
                 crypto: false,
                 fs: false,
-                path: false,
+                // path: false,                
                 process: false,
-                url: false
+                // url: false,
             }
         }
     };
@@ -311,10 +316,13 @@ module.exports = (_env, argv) => {
                     contextRegExp: /moment$/
                 }),
                 new webpack.ProvidePlugin({
+                    Buffer: ['buffer', 'Buffer'],
+                }),
+                new webpack.ProvidePlugin({
                     process: 'process/browser'
                 })
             ],
-            performance: getPerformanceHints(perfHintOptions, 4 * 1024 * 1024)
+            performance: getPerformanceHints(perfHintOptions, 5 * 1024 * 1024)
         }),
         Object.assign({}, config, {
             entry: {

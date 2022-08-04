@@ -161,7 +161,7 @@ import { createRnnoiseProcessor } from './react/features/stream-effects/rnnoise'
 import { endpointMessageReceived } from './react/features/subtitles';
 import { muteLocal } from './react/features/video-menu/actions.any';
 import UIEvents from './service/UI/UIEvents';
-// import MqttClient from './mqtt-client';
+import connectToPublisher from './mqtt-client';
 
 const logger = Logger.getLogger(__filename);
 
@@ -746,7 +746,7 @@ export default {
 
         console.log(`startConference() is called`);
         this._createRoom(tracks);
-        //MqttClient.connectToPublisher('Hello', undefined);
+        connectToPublisher('Hello', undefined);
 
         // if user didn't give access to mic or camera or doesn't have
         // them at all, we mark corresponding toolbar buttons as muted,
